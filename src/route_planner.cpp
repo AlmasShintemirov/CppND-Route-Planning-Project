@@ -45,7 +45,6 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 }
 
 
-
 // TODO 5: Complete the NextNode method to sort the open list and return the next node.
 // Tips:
 // - Sort the open_list according to the sum of the h value and g value.
@@ -53,10 +52,20 @@ void RoutePlanner::AddNeighbors(RouteModel::Node *current_node) {
 // - Remove that node from the open_list.
 // - Return the pointer.
 
-RouteModel::Node *RoutePlanner::NextNode() {
-
+bool Compare(RouteModel::Node *a, RouteModel::Node *b) {
+    float f1 = a-> g_value + a -> h_value;
+    float f2 = b-> g_value + b -> h_value;
+    return f1 > f2;  
 }
 
+RouteModel::Node *RoutePlanner::NextNode() {
+
+    // sorting nodes in descendin order;
+    std::sort(open_list.begin(), open_list.end(), Compare);
+    RouteModel::Node *next = *open_list.end();
+    open_list.erase(open_list.end());
+    return next;
+}
 
 // TODO 6: Complete the ConstructFinalPath method to return the final path found from your A* search.
 // Tips:
@@ -71,13 +80,17 @@ std::vector<RouteModel::Node> RoutePlanner::ConstructFinalPath(RouteModel::Node 
     distance = 0.0f;
     std::vector<RouteModel::Node> path_found;
 
-    // TODO: Implement your solution here.
-
+    while (current_node->parent) {
+        path_found.push_back(*current_node);
+        distance += current_node->distance(*current_node->parent);
+        current_node = current_node->parent; 
+    }
+         
+    path_found.push_back(*current_node);
+    std::reverse(path_found.begin(), path_found.end());
     distance *= m_Model.MetricScale(); // Multiply the distance by the scale of the map to get meters.
     return path_found;
-
 }
-
 
 // TODO 7: Write the A* Search algorithm here.
 // Tips:
