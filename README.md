@@ -14,7 +14,7 @@ or with SSH:
 ```
 git clone git@github.com:udacity/CppND-Route-Planning-Project.git --recurse-submodules
 ```
-Similarly the completed project can be cloned from this repository - choose 
+Similarly the completed project can be cloned from this repository - choose the "completed_project" branch instead
 
 
 ## Dependencies for Running Locally
